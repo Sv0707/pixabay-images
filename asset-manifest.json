@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/goit-react-hw-04-hooks-images/static/css/main.a6e2771f.chunk.css",
+    "main.js": "/goit-react-hw-04-hooks-images/static/js/main.8c9ce63b.chunk.js",
+    "main.js.map": "/goit-react-hw-04-hooks-images/static/js/main.8c9ce63b.chunk.js.map",
+    "runtime-main.js": "/goit-react-hw-04-hooks-images/static/js/runtime-main.debaf196.js",
+    "runtime-main.js.map": "/goit-react-hw-04-hooks-images/static/js/runtime-main.debaf196.js.map",
+    "static/js/2.cac89edd.chunk.js": "/goit-react-hw-04-hooks-images/static/js/2.cac89edd.chunk.js",
+    "static/js/2.cac89edd.chunk.js.map": "/goit-react-hw-04-hooks-images/static/js/2.cac89edd.chunk.js.map",
+    "index.html": "/goit-react-hw-04-hooks-images/index.html",
+    "static/css/main.a6e2771f.chunk.css.map": "/goit-react-hw-04-hooks-images/static/css/main.a6e2771f.chunk.css.map",
+    "static/js/2.cac89edd.chunk.js.LICENSE.txt": "/goit-react-hw-04-hooks-images/static/js/2.cac89edd.chunk.js.LICENSE.txt",
+    "static/media/Searchbar.module.css": "/goit-react-hw-04-hooks-images/static/media/search_ideogram.e979e3c4.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.debaf196.js",
+    "static/js/2.cac89edd.chunk.js",
+    "static/css/main.a6e2771f.chunk.css",
+    "static/js/main.8c9ce63b.chunk.js"
+  ]
+}
