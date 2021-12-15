@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import fetchImages from "../../services/api";
 import Searchbar from "../Searchbar/Searchbar";
@@ -11,105 +11,86 @@ const errorTextStyle = {
   textAlign: "center",
 };
 
-class App extends Component {
-  state = {
-    gallery: [],
-    search: "",
-    page: 1,
-    isModalOpen: false,
-    largeImage: "",
-    total: 0,
-    loading: false,
-    error: null,
-    showLoadMore: false,
-  };
+const App = () => {
 
-  fetchGallery = () => {
-    const { search, page } = this.state;
-    // console.log(search);
-    this.setState({ loading: true });
+  const [gallery, setGallery] = useState([]);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [largeImage, setLargeImage] = useState('');
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [showLoadMore, setShowLoadMore] = useState(false);
 
-    fetchImages(search, page)
-      .then(({ hits, total }) => {
-        if (hits.length === 0) {
-          this.setState({ showLoadMore: false })
-          return Promise.reject(
-            new Error(
-              `There is no pictures by ${search} name, please try another request`
-            )
-          );
-        } else {
-          this.showLoadMore(total, page);
-          this.setState((prevState) => ({
-            gallery: [...prevState.gallery, ...hits],
-            page: prevState.page + 1,
-            total,
-            error: false,
-          }));
+  useEffect(() => {
+    // const fetchGallery = async () => {
+
+      setLoading(true);
+  console.log(page);
+      fetchImages(search, page)
+        .then(({ hits, total }) => {
+          if (hits.length === 0) {
+            setShowLoadMore (false);
+            setGallery([]);
+            return Promise.reject(
+              new Error(
+                `There is no pictures by ${search} name, please try another request`
+              )
+            );
+            
+          } else {
+              setError(false);
+              setGallery(prevGallery => [...prevGallery, ...hits]);
+              setTotal(total);
+              }
         }
-      })
-      .catch((error) => this.setState({ error }))
-      .finally(() => this.setState({ loading: false }));
-  };
+        )
+        .catch((error) => setError(error))
+        .finally(() => setLoading(false));
+  }, [search, page]);
 
-  componentDidMount() {
-    this.setState({ loading: true });
-    this.fetchGallery();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const prevSearchItem = prevState.search;
-    const nextSearchItem = this.state.search;
-    if (prevSearchItem !== nextSearchItem) {
-      this.fetchGallery();
-    }
-  }
-
-  handleSubmit = (searchItem) => {
-    this.setState({ search: searchItem, gallery: [], page: 1 });
-  };
-
-  showLoadMore = (total, page) => {
+  useEffect(() => {
     if (Math.ceil(total / 12) > page) {
-      this.setState({ showLoadMore: true });
-    } else {
-      this.setState({ showLoadMore: false });
-    }
+      setShowLoadMore(true);
+    } 
+    else {setShowLoadMore (false)}
+    
+  }, [total, page])
+
+const toggleModal = () => {
+  setIsModalOpen(!isModalOpen);
   };
 
-  toggleModal = () => {
-    this.setState((prevState) => ({
-      isModalOpen: !prevState.isModalOpen,
-    }));
+const handleSubmit = (searchItem) => {
+    setSearch(searchItem);
+    setGallery([]);
+    setPage(1);
   };
 
-  handleOpenPicture = (largeIMG) => {
-    console.log(largeIMG);
-    this.setState({ largeImage: largeIMG });
-    this.toggleModal();
+const handleOpenPicture = (largeIMG) => {
+  console.log(largeIMG);
+  setLargeImage(largeIMG);
+    toggleModal();
   };
 
-  render() {
-    const { isModalOpen, gallery, largeImage, loading, error, showLoadMore } =
-      this.state;
     return (
       <div>
-        <Searchbar onSubmit={this.handleSubmit} />
+        <Searchbar onSubmit={handleSubmit} />
         {error && <h2 style={errorTextStyle}>{error.message}</h2>}
         {loading && <Loader />}
         {gallery.length > 0 && (
-          <ImageGallery gallery={gallery} openImg={this.handleOpenPicture} />
+          <ImageGallery gallery={gallery} openImg={handleOpenPicture} />
         )}
-        {showLoadMore && !loading && (<Button onClick={this.fetchGallery} />
+        {showLoadMore && !loading && (<Button onClick={() => setPage(page + 1)} />
         )}
         {isModalOpen && (
-          <Modal onClose={this.toggleModal}>
+          <Modal onClose={toggleModal}>
             <img src={largeImage} alt={largeImage} />
           </Modal>
         )}
       </div>
     );
-  }
 }
 
 export default App;
